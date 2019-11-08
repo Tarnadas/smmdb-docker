@@ -22,10 +22,10 @@ services:
       - LETSENCRYPT_HOST=smmdb.net
       - LETSENCRYPT_EMAIL=mreder1289@gmail.com
       - VIRTUAL_PORT=3000
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
+    # links:
+    #   - mongodb
+    # depends_on:
+    #   - mongodb
     restart: always
   api:
     image: tarnadas/smmdb-api
@@ -38,21 +38,31 @@ services:
       - LETSENCRYPT_HOST=api.smmdb.net
       - LETSENCRYPT_EMAIL=mreder1289@gmail.com
       - VIRTUAL_PORT=3030
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
+    # links:
+    #   - mongodb
+    # depends_on:
+    #   - mongodb
     restart: always
-  mongodb:
-    image: mongo:3.4
-    container_name: "mongodb"
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    volumes:
-      - mongodatabase:/data/db
+  # mongodb:
+  #   image: mongo:3.4
+  #   container_name: "mongodb"
+  #   environment:
+  #     - MONGO_DATA_DIR=/data/db
+  #     - MONGO_LOG_DIR=/dev/null
+  #   volumes:
+  #     - mongodatabase:/data/db
+  #   ports:
+  #     - "127.0.0.1:27017:27017"
+  #   restart: always
+  redirect:
+    image: cusspvz/redirect
     ports:
-      - "127.0.0.1:27017:27017"
-    restart: always
+      - "127.0.0.1:3031:80"
+    environment:
+      - REDIRECT=https://smmdb.net
+      - VIRTUAL_HOST=smmdb.ddns.net
+      - LETSENCRYPT_HOST=smmdb.ddns.net
+      - LETSENCRYPT_EMAIL=mreder1289@gmail.com
+      - VIRTUAL_PORT=3031
 volumes:
   mongodatabase:
